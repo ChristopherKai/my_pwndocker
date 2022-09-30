@@ -64,7 +64,9 @@ RUN python3 -m pip install -U pip && \
     capstone \
     angr \
     pebble \
-    r2pipe
+    r2pipe \
+    formatStringExploiter \
+    ipython
 
 RUN gem install one_gadget seccomp-tools && rm -rf /var/lib/gems/2.*/cache/*
 
@@ -112,5 +114,15 @@ RUN chmod a+x /ctf/linux_server /ctf/linux_server64
 ARG PWNTOOLS_VERSION
 
 RUN python3 -m pip install --no-cache-dir pwntools==${PWNTOOLS_VERSION}
+
+RUN git clone https://github.com/ChristopherKai/myLibcSearcher.git && cd myLibcSearcher && python setup.py develop && cd libc-database && ./add /lib/x86_64-linux-gnu/libc.so.6 && cd /opt \ 
+    && git clone https://github.com/pwndbg/pwndbg.git && cd pwndbg && ./setup.sh && cd - \
+    && git clone https://github.com/ChristopherKai/coolpwn.git && cd coolpwn && python setup.py install && cd -\
+    && git clone https://github.com/ChristopherKai/mytools.git && ln /opt/mytools/gentemplate/gentemplate.py /usr/local/bin/gentemplate
+
+RUN echo "root:root" | chpasswd && chmod +x /opt/entrypoint.sh\
+    # config pwndbg 
+    && printf "set context-code-lines 5\nset context-sections regs disasm code ghidra stack  expressions" >>/root/.gdbinit \
+    && printf "\nexport LC_ALL=en_US.UTF-8\nexport PYTHONIOENCODING=UTF-8" >> /etc/profile 
 
 CMD ["/sbin/my_init"]
