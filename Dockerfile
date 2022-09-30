@@ -48,9 +48,9 @@ RUN dpkg --add-architecture i386 && \
 RUN ln -fs /usr/share/zoneinfo/$TZ /etc/localtime && \
     dpkg-reconfigure -f noninteractive tzdata
     
-RUN version=$(curl https://github.com/radareorg/radare2/releases/latest | grep -P '/tag/\K.*?(?=")' -o) && \
-    wget https://github.com/radareorg/radare2/releases/download/${version}/radare2_${version}_amd64.deb && \
-    dpkg -i radare2_${version}_amd64.deb && rm radare2_${version}_amd64.deb
+# RUN version=$(curl https://github.com/radareorg/radare2/releases/latest | grep -P '/tag/\K.*?(?=")' -o) && \
+#     wget https://github.com/radareorg/radare2/releases/download/${version}/radare2_${version}_amd64.deb && \
+#     dpkg -i radare2_${version}_amd64.deb && rm radare2_${version}_amd64.deb
 
 RUN python3 -m pip install -U pip && \
     python3 -m pip install --no-cache-dir \
