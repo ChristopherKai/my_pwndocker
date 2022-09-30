@@ -111,9 +111,9 @@ COPY linux_server linux_server64  /ctf/
 
 RUN chmod a+x /ctf/linux_server /ctf/linux_server64
 
-ARG PWNTOOLS_VERSION
+# ARG PWNTOOLS_VERSION
 
-RUN python3 -m pip install --no-cache-dir pwntools==${PWNTOOLS_VERSION}
+RUN python3 -m pip install --no-cache-dir pwntools==4.8.0
 
 RUN git clone https://github.com/ChristopherKai/myLibcSearcher.git && cd myLibcSearcher && python setup.py develop && cd libc-database && ./add /lib/x86_64-linux-gnu/libc.so.6 && cd /opt \ 
     && git clone https://github.com/pwndbg/pwndbg.git && cd pwndbg && ./setup.sh && cd - \
